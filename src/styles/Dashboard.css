@@ -1,0 +1,93 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: #0e1111;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  /* Dashboard Container */
+  .dashboard-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Header */
+  .dashboard-header {
+    display: flex;
+    align-items: center;
+    background-color: #1f2425;
+    padding: 16px 24px;
+  }
+  
+  .brand {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  
+  /* Main Section */
+  .dashboard-main {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Page Title */
+  .page-title {
+    font-size: 1.75rem;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+  
+  /* QR Button */
+  .qr-button {
+    background-color: #006cff;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 24px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .qr-button:hover {
+    background-color: #0056cc;
+  }
+  
+  /* Section Title */
+  .section-title {
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+    margin-top: 20px;
+    color: #bfc5c5;
+  }
+  
+  /* Attendance Container (wrapper for the table) */
+  .attendance-container {
+    background-color: #1f2425;
+    border-radius: 8px;
+    padding: 16px;
+  }
+  
+  /* Adjust spacing if needed */
+  .attendance-container h2 {
+    margin-bottom: 12px;
+  }
+  
+  /* Responsive Layout Example */
+  @media (max-width: 768px) {
+    .dashboard-main {
+      padding: 16px;
+    }
+  }
+  

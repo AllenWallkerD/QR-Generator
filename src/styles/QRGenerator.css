@@ -1,0 +1,84 @@
+/* Container for the entire QR Generator component */
+.qr-generator-container {
+  max-width: 300px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+/* QR Box: contains only the QR code */
+.qr-box {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 20px;
+}
+
+/* Error state for the QR box */
+.qr-box.error {
+  background-color: #f0f0f0;
+}
+
+/* Error text styling */
+.error-text {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+/* Session and expiration info (outside the QR box) */
+.session-info,
+.expires-info {
+  margin: 12px 0 4px;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.expires-info {
+  color: #f39c12;
+}
+
+.expired-text {
+  color:#113c79;
+  font-weight: bold;
+  font-size: large;
+}
+
+/* Button group container */
+.button-group {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Base button style */
+.btn {
+  border: none;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: #fff;
+}
+
+/* Retrieve button styled in red */
+.retrieve-btn {
+  background-color: #dc3545;
+}
+
+.retrieve-btn:hover {
+  background-color: #c82333;
+}
+
+/* Refresh button styled in blue */
+.refresh-btn {
+  background-color: #007bff;
+}
+
+.refresh-btn:hover {
+  background-color: #0056cc;
+}
