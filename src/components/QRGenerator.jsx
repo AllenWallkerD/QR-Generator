@@ -1,11 +1,9 @@
-// src/pages/QRGenerator.jsx
 import React, { useState, useEffect } from 'react';
 import QRCode from 'react-qr-code';
 import '../styles/QRGenerator.css';
 
-// Default geolocation values
-const DEFAULT_LAT = 43.218843810825405;
-const DEFAULT_LNG = 76.92844706286535;
+const DEFAULT_LAT = 43.226071586418605;
+const DEFAULT_LNG = 76.92262745080029;
 
 const QRGenerator = ({ onRetrieve }) => {
   const [sessionId, setSessionId] = useState('');
