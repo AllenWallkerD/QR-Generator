@@ -1,13 +1,15 @@
+// src/pages/StudentDataTable.jsx
 import React, { useEffect, useState } from 'react';
 import { fetchAllAttendance } from '../services/firestore';
 import '../styles/StudentDataTable.css';
 
+// Default fallback geolocation
 const DEFAULT_LAT = 43.218843810825405;
 const DEFAULT_LNG = 76.92844706286535;
 const DISTANCE_THRESHOLD_KM = 0.05;
 
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-  const R = 6371; 
+  const R = 6371; // Earth's radius in km
   const dLat = deg2rad(lat2 - lat1);
   const dLon = deg2rad(lon2 - lon1);
   const a =
@@ -49,6 +51,7 @@ const StudentDataTable = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Retrieve teacher's geolocation from localStorage (or use defaults)
   const teacherLat = parseFloat(localStorage.getItem("teacherLatitude")) || DEFAULT_LAT;
   const teacherLng = parseFloat(localStorage.getItem("teacherLongitude")) || DEFAULT_LNG;
 
@@ -66,15 +69,14 @@ const StudentDataTable = () => {
         <tbody>
           {attendanceList.map((item) => {
             const { _id, name, studentId, scannedAt, latitude, longitude } = item;
-
+            
             let formattedTime = "";
             if (scannedAt) {
-              const dateObj = scannedAt.toDate
-                ? scannedAt.toDate()
-                : new Date(scannedAt);
+              const dateObj = scannedAt.toDate ? scannedAt.toDate() : new Date(scannedAt);
               formattedTime = formatTimeOnly(dateObj);
             }
 
+            // Compute validity using teacher's location
             let valid = "no";
             if (latitude !== undefined && longitude !== undefined) {
               const distance = getDistanceFromLatLonInKm(
@@ -89,11 +91,11 @@ const StudentDataTable = () => {
             return (
               <tr key={_id}>
                 <td className="name-cell">
-                  <span className={`valid-indicator ${valid}`} />
+                  <span className={`valid-indicator ${valid}`}></span>
                   <span className="name-text">{name}</span>
                 </td>
                 <td>{studentId}</td>
-                <td>{formattedTime}</td>
+                <td className="time-cell">{formattedTime}</td>
               </tr>
             );
           })}

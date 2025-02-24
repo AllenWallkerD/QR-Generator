@@ -1,18 +1,21 @@
+// src/pages/QRGenerator.jsx
 import React, { useState, useEffect } from 'react';
 import QRCode from 'react-qr-code';
 import '../styles/QRGenerator.css';
 
+// Default geolocation values
+const DEFAULT_LAT = 43.218843810825405;
+const DEFAULT_LNG = 76.92844706286535;
+
 const QRGenerator = ({ onRetrieve }) => {
   const [sessionId, setSessionId] = useState('');
   const [countdown, setCountdown] = useState(60);
-  const [geoErrorMsg, setGeoErrorMsg] = useState('');
 
   const generateNewSession = () => {
     const newSession = `session-${Date.now()}`;
     console.log("Generated new session:", newSession);
     setSessionId(newSession);
     setCountdown(60);
-    setGeoErrorMsg('');
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -24,11 +27,15 @@ const QRGenerator = ({ onRetrieve }) => {
         },
         (error) => {
           console.error("Error obtaining geolocation:", error);
-          setGeoErrorMsg("Геолокацияны алу кезінде қате болды. Өтінеміз, браузер параметрлерінен геолокацияны қосыңыз.");
+          // If permission is denied or an error occurs, store the default values
+          localStorage.setItem("teacherLatitude", DEFAULT_LAT);
+          localStorage.setItem("teacherLongitude", DEFAULT_LNG);
         }
       );
     } else {
-      setGeoErrorMsg("Браузер геолокацияны қолдамайды.");
+      // If geolocation is not supported, use defaults.
+      localStorage.setItem("teacherLatitude", DEFAULT_LAT);
+      localStorage.setItem("teacherLongitude", DEFAULT_LNG);
     }
   };
 
@@ -62,19 +69,7 @@ const QRGenerator = ({ onRetrieve }) => {
     );
   }
 
-  if (geoErrorMsg) {
-    return (
-      <div className="qr-generator-container">
-        <div className="qr-box error">
-          <p className="error-text">{geoErrorMsg}</p>
-        </div>
-        <div className="button-group">
-          <button className="btn refresh-btn" onClick={generateNewSession}>Refresh</button>
-        </div>
-      </div>
-    );
-  }
-
+  // Use the sessionId as the QR code content.
   const qrValue = sessionId;
   console.log("QR value being encoded:", qrValue);
 
