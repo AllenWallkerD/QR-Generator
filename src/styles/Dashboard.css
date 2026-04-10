@@ -1,0 +1,90 @@
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0e1111;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Main Section */
+.dashboard-main {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Section Title */
+.section-title {
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+  margin-top: 20px;
+  color: #bfc5c5;
+}
+
+/* Attendance Container */
+.attendance-container {
+  background-color: #1f2425;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/* Geo Button: Green */
+.geo-button {
+  background-color: #28a745; /* green */
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-right: 10px;
+  margin-bottom: 24px;
+}
+.geo-button:hover {
+  background-color: #005d14;
+}
+.geo-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* QR Button: Blue */
+.qr-button {
+  background-color: #006cff;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: background-color 0.2s ease;
+}
+.qr-button:hover {
+  background-color: #0056cc;
+}
+.qr-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* Responsive Layout Example */
+@media (max-width: 768px) {
+  .dashboard-main {
+    padding: 16px;
+  }
+}

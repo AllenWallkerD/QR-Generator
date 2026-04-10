@@ -1,0 +1,78 @@
+.qr-generator-container {
+  max-width: 300px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.qr-box {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 20px;
+}
+
+.qr-box.error {
+  background-color: #f0f0f0;
+}
+
+.error-text {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.session-info,
+.expires-info {
+  margin: 12px 0 4px;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.expires-info {
+  color: #f39c12;
+}
+
+.expired-text {
+  color: #113c79;
+  font-weight: bold;
+  font-size: large;
+}
+
+.button-group {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn {
+  border: none;
+  padding: 10px 14px;
+  font-size: 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.retrieve-btn {
+  background-color: #dc3545;
+}
+
+.retrieve-btn:hover {
+  background-color: #c82333;
+}
+
+.refresh-btn {
+  background-color: #007bff;
+}
+
+.refresh-btn:hover {
+  background-color: #0056cc;
+}
