@@ -1,0 +1,299 @@
+.stats-container {
+  margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.stats-loading {
+  text-align: center;
+  color: #bfc5c5;
+  padding: 20px 0;
+}
+
+/* Скелетон загрузки */
+.skeleton {
+  display: block;
+  background: linear-gradient(90deg, #2c3132 25%, #3a3f40 37%, #2c3132 63%);
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+  border-radius: 6px;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.skeleton-value {
+  width: 48px;
+  height: 28px;
+}
+
+.skeleton-label {
+  width: 72px;
+  height: 12px;
+  margin-top: 8px;
+}
+
+.stats-skeleton-table {
+  margin-top: 8px;
+}
+
+.skeleton-row {
+  height: 44px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.stats-total {
+  font-size: 1.1rem;
+  color: #bfc5c5;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* KPI-карточки */
+.stats-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  flex: 1 1 140px;
+  background-color: #2c3132;
+  border-radius: 8px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 3px solid transparent;
+}
+
+.stat-card.danger {
+  border-bottom-color: #e74c3c;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.stat-card.danger .stat-value {
+  color: #e74c3c;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #bfc5c5;
+}
+
+/* Имя и ID студента */
+.student-name {
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.student-id {
+  font-size: 0.8rem;
+  color: #8b9192;
+  margin-top: 2px;
+}
+
+/* Полоска-индикатор процента */
+.bar-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.bar-track {
+  width: 120px;
+  height: 8px;
+  background-color: #3a3f40;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.bar-fill.low {
+  background-color: #2ecc71;
+}
+
+.bar-fill.medium {
+  background-color: #f39c12;
+}
+
+.bar-fill.high {
+  background-color: #e74c3c;
+}
+
+.bar-value {
+  font-size: 0.95rem;
+  color: #fff;
+  min-width: 42px;
+}
+
+.suspicious-note {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: #f39c12;
+}
+
+.stats-table {
+  table-layout: auto;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #2c3132;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.stats-table thead {
+  background-color: #2c3132;
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #3a3f40;
+  color: #fff;
+  text-align: center;
+}
+
+.stats-table th {
+  font-weight: 500;
+  color: #bfc5c5;
+}
+
+.stats-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.stats-table th.sortable:hover {
+  color: #fff;
+  background-color: #3a3f40;
+}
+
+.sort-arrow {
+  font-size: 0.8rem;
+}
+
+.stats-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.stats-table th:nth-child(1),
+.stats-table td:nth-child(1) {
+  text-align: left;
+}
+
+.stats-name {
+  font-size: 1.05rem;
+}
+
+.risk-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.risk-badge.low {
+  background-color: #2ecc71;
+}
+
+.risk-badge.medium {
+  background-color: #f39c12;
+}
+
+.risk-badge.high {
+  background-color: #e74c3c;
+}
+
+.trend {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.trend.up {
+  color: #2ecc71;
+}
+
+.trend.down {
+  color: #e74c3c;
+}
+
+.trend.flat {
+  color: #bfc5c5;
+}
+
+.stats-note {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: #8b9192;
+  line-height: 1.4;
+}
+
+.warnings-block {
+  margin-top: 24px;
+  background-color: #2c3132;
+  border-left: 4px solid #e74c3c;
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.warnings-title {
+  font-size: 1.1rem;
+  color: #e74c3c;
+  margin-bottom: 12px;
+}
+
+.warnings-empty {
+  color: #bfc5c5;
+}
+
+.warnings-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.warnings-list li {
+  color: #fff;
+  padding: 6px 0;
+  border-bottom: 1px solid #3a3f40;
+}
+
+.warnings-list li:last-child {
+  border-bottom: none;
+}
+
+@media (max-width: 600px) {
+  .stats-table {
+    font-size: 0.9rem;
+  }
+  .stats-table th,
+  .stats-table td {
+    padding: 10px 12px;
+  }
+}

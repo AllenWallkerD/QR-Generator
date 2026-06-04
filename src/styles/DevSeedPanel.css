@@ -1,0 +1,78 @@
+/* Плавающая панель сидов под логотипом (появляется по тайному тапу) */
+.dev-panel {
+  position: fixed;
+  top: 64px;
+  left: 16px;
+  width: 208px;
+  background-color: #1f2425;
+  border: 1px solid #2c3132;
+  border-radius: 10px;
+  padding: 12px;
+  z-index: 2000;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dev-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dev-panel-title {
+  color: #8b9192;
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+}
+
+.dev-panel-close {
+  background: transparent;
+  border: none;
+  color: #bfc5c5;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.dev-panel-close:hover {
+  color: #fff;
+}
+
+.dev-panel-btn {
+  border: none;
+  border-radius: 7px;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+.dev-panel-btn:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.dev-panel-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dev-panel-btn.seed1 {
+  background-color: #2e7d32;
+}
+
+.dev-panel-btn.seed2 {
+  background-color: #6f42c1;
+}
+
+.dev-panel-status {
+  color: #bfc5c5;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  border-top: 1px solid #2c3132;
+  padding-top: 6px;
+}

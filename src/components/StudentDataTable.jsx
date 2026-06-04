@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { MdRefresh, MdDeleteSweep, MdFileDownload } from 'react-icons/md';
-import { fetchAllAttendance, subscribeToAttendance, deleteAllAttendanceRecords } from '../services/firestore';
+import { MdRefresh, MdDeleteSweep, MdFileDownload, MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import { fetchAllAttendance, subscribeToAttendance, deleteAllAttendanceRecords, deleteAllSessions } from '../services/firestore';
+import { useI18n } from '../i18n/i18n';
 import '../styles/StudentDataTable.css';
 import * as XLSX from 'xlsx';
 
@@ -10,11 +11,29 @@ function formatTimeOnly(date) {
   return `${h}:${m}`;
 }
 
+// Локализованная подпись статуса посещения
+function statusLabel(status, t) {
+  if (status === 'present') return t('status.present');
+  if (status === 'late') return t('status.late');
+  return '—';
+}
+
+const PAGE_SIZE = 10; // строк на страницу
+
 export default function StudentDataTable() {
+  const { t } = useI18n();
   const [attendanceList, setAttendanceList] = useState([]);
   const [isDeleting, setIsDeleting] = useState(false);
   const [newIds, setNewIds] = useState(new Set());
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loaded, setLoaded] = useState(false);
   const knownIdsRef = useRef(new Set());
+
+  // Если данных стало меньше — не «зависаем» на несуществующей странице
+  useEffect(() => {
+    const totalPages = Math.max(1, Math.ceil(attendanceList.length / PAGE_SIZE));
+    setCurrentPage((p) => Math.min(p, totalPages));
+  }, [attendanceList.length]);
 
   useEffect(() => {
     const unsubscribe = subscribeToAttendance((data) => {
@@ -31,6 +50,7 @@ export default function StudentDataTable() {
         setTimeout(() => setNewIds(new Set()), 600);
       }
       setAttendanceList(data);
+      setLoaded(true);
     });
     return () => unsubscribe();
   }, []);
@@ -46,7 +66,8 @@ export default function StudentDataTable() {
   const handleClearAll = async () => {
     setIsDeleting(true);
     try {
-      await deleteAllAttendanceRecords();
+      // Чистим и посещения, и сессии, чтобы статистика не оставалась «грязной»
+      await Promise.all([deleteAllAttendanceRecords(), deleteAllSessions()]);
       knownIdsRef.current = new Set();
     } catch {}
     setIsDeleting(false);
@@ -60,33 +81,39 @@ export default function StudentDataTable() {
       const timeText = dateObj ? formatTimeOnly(dateObj) : '';
 
       return {
-        'Аты': item.name || '',
-        'Студент ID': item.studentId || '',
-        'Уақыт': timeText,
-        'Арақашықтық (м)': item.distance != null ? Math.round(item.distance) : '',
-        'Рұқсат етілген қашықтықта': item.valid ? 'Иә' : 'Жоқ'
+        [t('table.name')]: item.name || '',
+        [t('table.studentId')]: item.studentId || '',
+        [t('table.time')]: timeText,
+        [t('table.status')]: statusLabel(item.status, t),
+        [t('table.distance')]: item.distance != null ? Math.round(item.distance) : '',
+        [t('export.allowed')]: item.valid ? t('export.yes') : t('export.no')
       };
     });
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Сабаққа Қатысу');
+    XLSX.utils.book_append_sheet(workbook, worksheet, t('export.sheet'));
     XLSX.writeFile(workbook, 'attendance.xlsx');
   };
 
+  // Пагинация: показываем только строки текущей страницы
+  const totalPages = Math.max(1, Math.ceil(attendanceList.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const pageRows = attendanceList.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
   return (
     <div className="table-container">
-      <h2 className="table-title">Сабақтағы студенттер</h2>
+      <h2 className="table-title">{t('table.title')}</h2>
 
       <div className="export-button-container">
-        <button className="refresh-button" onClick={handleRefresh} title="Жаңарту">
+        <button className="refresh-button" onClick={handleRefresh} title={t('table.refresh')}>
           <MdRefresh />
         </button>
         <button
           className="clean-button"
           onClick={handleClearAll}
           disabled={isDeleting}
-          title="Тазарту"
+          title={t('table.clear')}
         >
           <MdDeleteSweep />
         </button>
@@ -112,22 +139,29 @@ export default function StudentDataTable() {
               color: '#fff'
             }}
           >
-            Тазартуда...
+            {t('table.clearing')}
           </p>
+        </div>
+      ) : !loaded ? (
+        <div className="table-skeleton">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div className="skeleton skeleton-row" key={i} />
+          ))}
         </div>
       ) : (
         <table className="attendance-table">
           <thead>
             <tr>
-              <th>Аты</th>
-              <th>Студент ID</th>
-              <th>Уақыт</th>
-              <th>Арақашықтық (м)</th>
+              <th>{t('table.name')}</th>
+              <th>{t('table.studentId')}</th>
+              <th>{t('table.time')}</th>
+              <th>{t('table.status')}</th>
+              <th>{t('table.distance')}</th>
             </tr>
           </thead>
           <tbody>
-            {attendanceList.map((item) => {
-              const { _id, name, studentId, scannedAt, valid, distance } = item;
+            {pageRows.map((item) => {
+              const { _id, name, studentId, scannedAt, valid, distance, status } = item;
 
               let timeText = '';
               if (scannedAt) {
@@ -145,12 +179,35 @@ export default function StudentDataTable() {
                   </td>
                   <td>{studentId}</td>
                   <td>{timeText}</td>
+                  <td>{statusLabel(status, t)}</td>
                   <td>{distance != null ? Math.round(distance) : '—'}</td>
                 </tr>
               );
             })}
           </tbody>
         </table>
+      )}
+
+      {!isDeleting && loaded && totalPages > 1 && (
+        <div className="pagination">
+          <button
+            className="page-btn"
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={safePage <= 1}
+            title={t('table.prev')}
+          >
+            <MdChevronLeft />
+          </button>
+          <span className="page-info">{safePage} / {totalPages}</span>
+          <button
+            className="page-btn"
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            disabled={safePage >= totalPages}
+            title={t('table.next')}
+          >
+            <MdChevronRight />
+          </button>
+        </div>
       )}
     </div>
   );

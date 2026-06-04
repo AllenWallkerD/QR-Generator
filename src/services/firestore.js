@@ -3,6 +3,7 @@ import {
   collection,
   addDoc,
   getDocs,
+  getCountFromServer,
   query,
   orderBy,
   onSnapshot,
@@ -72,12 +73,73 @@ export const getUserRecord = async (uid) => {
   return null;
 };
 
-export const deleteAllAttendanceRecords = async () => {
-  const batch = writeBatch(db);
-  const colRef = collection(db, ATTENDANCE_COLLECTION);
-  const snapshot = await getDocs(colRef);
-  snapshot.forEach((docItem) => {
-    batch.delete(docItem.ref);
+// Живая подписка на студентов
+export const subscribeToUsers = (callback) => {
+  const colRef = collection(db, 'users');
+  return onSnapshot(colRef, (snapshot) => {
+    callback(
+      snapshot.docs.map((docItem) => {
+        const data = docItem.data();
+        return { studentId: data.studentId, name: data.name, email: data.email };
+      })
+    );
   });
-  await batch.commit();
+};
+
+// Живая подписка на сессии (отсортированы по startedAt по возрастанию)
+export const subscribeToSessions = (callback) => {
+  const colRef = collection(db, 'sessions');
+  const q = query(colRef, orderBy('startedAt', 'asc'));
+  return onSnapshot(q, (snapshot) => {
+    callback(snapshot.docs.map((docItem) => ({ id: docItem.id, ...docItem.data() })));
+  });
+};
+
+// Все студенты из коллекции `users`
+export const fetchAllUsers = async () => {
+  const colRef = collection(db, 'users');
+  const snapshot = await getDocs(colRef);
+  return snapshot.docs.map((docItem) => {
+    const data = docItem.data();
+    return { studentId: data.studentId, name: data.name, email: data.email };
+  });
+};
+
+// Количество проведённых сессий — серверный счётчик, без скачивания документов
+export const fetchSessionsCount = async () => {
+  const colRef = collection(db, 'sessions');
+  const snapshot = await getCountFromServer(colRef);
+  return snapshot.data().count;
+};
+
+// Все сессии с их id, сортировка по startedAt по возрастанию на стороне сервера
+export const fetchAllSessions = async () => {
+  const colRef = collection(db, 'sessions');
+  const q = query(colRef, orderBy('startedAt', 'asc'));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((docItem) => ({
+    id: docItem.id,
+    ...docItem.data()
+  }));
+};
+
+// Удаление всей коллекции пачками (лимит batch — 500 операций)
+const deleteAllInCollection = async (name) => {
+  const colRef = collection(db, name);
+  const snapshot = await getDocs(colRef);
+  const docs = snapshot.docs;
+  for (let i = 0; i < docs.length; i += 450) {
+    const batch = writeBatch(db);
+    docs.slice(i, i + 450).forEach((d) => batch.delete(d.ref));
+    await batch.commit();
+  }
+};
+
+export const deleteAllAttendanceRecords = async () => {
+  await deleteAllInCollection(ATTENDANCE_COLLECTION);
+};
+
+// Удаление всех сессий — чтобы очистка не оставляла «пустые» уроки в статистике
+export const deleteAllSessions = async () => {
+  await deleteAllInCollection('sessions');
 };

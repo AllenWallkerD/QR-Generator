@@ -1,0 +1,140 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 240px;
+  background-color: #1f2425;
+  border-right: 1px solid #2c3132;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  z-index: 100;
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  padding: 0 24px;
+  margin-bottom: 32px;
+  white-space: nowrap;
+  overflow: hidden;
+  user-select: none; /* чтобы тройной клик не выделял текст */
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 24px;
+  color: #bfc5c5;
+  text-decoration: none;
+  font-size: 1rem;
+  border-left: 3px solid transparent;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-link:hover {
+  background-color: #2c3132;
+  color: #fff;
+}
+
+.sidebar-link.active {
+  background-color: #2c3132;
+  color: #fff;
+  border-left-color: #006cff;
+}
+
+.sidebar-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.sidebar-label {
+  min-width: 0;
+  white-space: normal;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+/* Переключатель языка — сегментированный контрол внизу сайдбара */
+.lang-switcher {
+  margin-top: auto;
+  margin-left: 24px;
+  margin-right: 24px;
+  display: flex;
+  gap: 4px;
+  background-color: #14181a;
+  border: 1px solid #2c3132;
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.lang-option {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #bfc5c5;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 8px 0;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.lang-option:hover {
+  color: #fff;
+}
+
+.lang-option.active {
+  background-color: #006cff;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 108, 255, 0.4);
+}
+
+/* Контент страницы смещается вправо, чтобы не уходить под сайдбар */
+.app-content {
+  margin-left: 240px;
+  min-height: 100vh;
+}
+
+/* На узких экранах сайдбар сворачивается до иконок (только через CSS) */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 64px;
+  }
+  .sidebar-title {
+    display: none;
+  }
+  .sidebar-label {
+    display: none;
+  }
+  .sidebar-link {
+    justify-content: center;
+    gap: 0;
+    padding: 12px 0;
+  }
+  .app-content {
+    margin-left: 64px;
+  }
+  /* Узкий сайдбар: язык — вертикальным столбиком */
+  .lang-switcher {
+    flex-direction: column;
+    margin-left: 8px;
+    margin-right: 8px;
+    gap: 4px;
+  }
+  .lang-option {
+    padding: 6px 0;
+    font-size: 0.7rem;
+  }
+}
