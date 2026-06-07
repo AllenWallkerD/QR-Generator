@@ -17,6 +17,7 @@ export default function QRGenerator() {
     expired,
     error,
     closeSession,
+    rotateNow,
     refreshSession
   } = useGenerator();
 
@@ -71,7 +72,7 @@ export default function QRGenerator() {
       <p className="session-info">{t('qr.endsIn', { time: `${mm}:${ss}` })}</p>
       <div className="button-group">
         <button className="btn retrieve-btn" onClick={closeSession} title={t('qr.close')}><MdClose /></button>
-        <button className="btn refresh-btn" onClick={refreshSession} title={t('qr.refresh')}><MdRefresh /></button>
+        <button className="btn refresh-btn" onClick={rotateNow} title={t('qr.refresh')}><MdRefresh /></button>
       </div>
     </div>
   );

@@ -124,7 +124,26 @@ export function GeneratorProvider({ children }) {
     setActive(false);
   }, []);
 
-  // Обновить: новая 15-минутная сессия
+  // Обновить только минутный QR-код: сменить токен и сбросить 60-секундный
+  // отсчёт, не трогая общий 15-минутный таймер сессии.
+  const rotateNow = useCallback(() => {
+    if (!classSessionIdRef.current || rotatingRef.current) return;
+    rotatingRef.current = true;
+    const previous = currentTokenRef.current;
+    rotateToken(classSessionIdRef.current, previous)
+      .then((newToken) => {
+        currentTokenRef.current = newToken;
+        setToken(newToken);
+        nextRef.current = ROTATE_SECONDS;
+        setNextCountdown(ROTATE_SECONDS);
+      })
+      .catch(() => {})
+      .finally(() => {
+        rotatingRef.current = false;
+      });
+  }, []);
+
+  // Обновить: новая 15-минутная сессия (используется после истечения/ошибки)
   const refreshSession = useCallback(() => {
     startSession();
   }, [startSession]);
@@ -139,6 +158,7 @@ export function GeneratorProvider({ children }) {
     error,
     startSession,
     closeSession,
+    rotateNow,
     refreshSession
   };
 
